@@ -13,11 +13,11 @@ This a script/tool to extract files from the **RPA** archive format from the [`R
     using Solicen.RenPy
     Archive.ExtractArchive("path_to_RPA");
     ```
-* Or [download]() a command tool for extraction files from the RPA archive.
+* Or [download](https://github.com/SolicenTEAM/RPAExtractorCSharp/releases) a command tool for extraction files from the RPA archive.
 
 ## Contributions:
 * You can create your own fork of this project and contribute to its development.
-* You can also contribute via the [`Issues`]() and [`Pull Request`]() tabs by suggesting your code changes. And further development of the project. 
+* You can also contribute via the [`Issues`](https://github.com/SolicenTEAM/RPAExtractorCSharp/issues) and [`Pull Request`](https://github.com/SolicenTEAM/RPAExtractorCSharp/pulls) tabs by suggesting your code changes. And further development of the project. 
 
 ## Future of Project:
 The initial state of the code and the project involved adding files to `RPA` archives, as well as creating an `RPA` archive based on files to eliminate the use of `unRPA` in CSharp projects. 
@@ -30,3 +30,11 @@ You can use this project/script anywhere you want with an indication of authorsh
 
 ---
 We express our great gratitude to the author of `unRPA` for the open source code on the basis of which this project was created in the CSharp language.
+
+---
+
+These wonderful people have made an invaluable contribution to the project:
+
+<a href="https://github.com/SolicenTEAM/RPAExtractorCSharp/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=SolicenTEAM/RPAExtractorCSharp" />
+</a>

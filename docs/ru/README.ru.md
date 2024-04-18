@@ -13,11 +13,11 @@
     using Solicen.RenPy
     Archive.ExtractArchive("path_to_RPA");
     ```
-*  Или [загрузите]() программу командной строки для извлечения файлов из **RPA** архивов.
+*  Или [загрузите](https://github.com/SolicenTEAM/RPAExtractorCSharp/releases) программу командной строки для извлечения файлов из **RPA** архивов.
 
 ## Ваш вклад:
 * Вы можете создать свой собственный форк этого проекта и внести свой вклад в его развитие.
-* Вы также можете внести свой вклад через вкладки [`Issues`]() и [`Pull Request`](), предложив свои изменения кода. И дальнейшее развитие проекта. 
+* Вы также можете внести свой вклад через вкладки [`Issues`](https://github.com/SolicenTEAM/RPAExtractorCSharp/issues) и [`Pull Request`](https://github.com/SolicenTEAM/RPAExtractorCSharp/pulls), предложив свои изменения кода. И дальнейшее развитие проекта. 
 
 ## Будущее проекта:
 Исходное состояние кода и проекта включало добавление файлов в архивы `RPA`, а также создание архива `RPA` на основе файлов, чтобы исключить использование `unRPA` в проектах CSharp. 
@@ -29,3 +29,11 @@
 
 ---
 Мы выражаем нашу огромную благодарность автору `unRPA` за открытый исходный код, на основе которого был создан этот проект на языке CSharp.
+
+---
+
+Эти прекрасные люди внесли свой неоценимый вклад в проект:
+
+<a href="https://github.com/SolicenTEAM/RPAExtractorCSharp/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=SolicenTEAM/RPAExtractorCSharp" />
+</a>
