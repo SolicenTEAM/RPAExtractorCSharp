@@ -182,13 +182,15 @@ namespace Solicen.RenPy
         }
 
         //Извлекает все RPA файлы
-        public static void ExtractAllRPA(string directory)
+        public static void ExtractAllRPA(string directory, string output)
         {     
             var RPAFiles = RPAFilesInDirectory(directory);
             foreach (var rpa in RPAFiles)
             {
-                ExtractArchive(rpa);
+                ExtractArchive(rpa, output);
             }
+
+            Console.WriteLine("\nВсе процессы завершены!");
         }
 
         public static string[] ListFromDirectory(string directory)
@@ -219,7 +221,7 @@ namespace Solicen.RenPy
         }
 
         static int index = 0;
-        public static async void ExtractArchive(string path)
+        public static async void ExtractArchive(string path, string output)
         {
             //Стандартная кодировка Windows 1251
             Encoding enCode = Encoding.GetEncoding(1252);
@@ -231,7 +233,7 @@ namespace Solicen.RenPy
 
             var indexFile = 0;
             var fileName = "";
-            var directory = Environment.CurrentDirectory + "\\.rpy\\";
+            var directory = output;
             var directoryName = directory.Split('/')[directory.Split('/').Length - 1];
             var filePath = "\\m\\";
 
@@ -330,6 +332,8 @@ namespace Solicen.RenPy
                     catch { }
                 }            
             }
+
+            Console.WriteLine("\nПроцесс завершен!");
         }
 
         //Прочитывает все необходимые байты из потока

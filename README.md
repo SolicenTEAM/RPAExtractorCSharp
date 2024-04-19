@@ -11,9 +11,22 @@ This a script/tool to extract files from the **RPA** archive format from the [`R
     And using this in your project or code, or program with:
     ```csharp
     using Solicen.RenPy
-    Archive.ExtractArchive("path_to_RPA");
+    Archive.ExtractArchive("path_to_rpa", "output_path");
     ```
 * Or [download](https://github.com/SolicenTEAM/RPAExtractorCSharp/releases) a command tool for extraction files from the RPA archive.
+* Or use `rpaext.exe` in command line for extract RPA archive.
+
+### rpaext - RPA Extractor
+* You can simply drag and drop your `.rpa` file onto `rpaext.exe `for unpacking. 
+* Or use more advanced options with CMD.
+
+```cmd
+rpaext.exe -p "path_to_rpa" -o "output_dir" 
+```
+| Argument | Description |
+|----------|-------------|
+| -p PATH, -path PATH | rpa file to extract, will use with `*` to extract all `.rpa` file in directory
+| -o PATH, -output PATH | extract files to the given path (default: the current directory)
 
 ## Contributions:
 * You can create your own fork of this project and contribute to its development.
