@@ -17,7 +17,7 @@ This a script/tool to extract files from the **RPA** archive format from the [`R
 * Or use `rpaext.exe` in command line for extract RPA archive.
 
 ### rpaext - RPA Extractor
-* You can simply drag and drop your `.rpa` file onto `rpaext.exe `for unpacking. 
+* You can simply drag and drop your `.rpa` file onto `rpaext.exe` for unpacking. 
 * Or use more advanced options with CMD.
 
 ```cmd
