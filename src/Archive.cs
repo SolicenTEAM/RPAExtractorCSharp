@@ -9,11 +9,10 @@ namespace Solicen.RenPy
 {
     class Archive
     {
-        static string[] files; static string[] indexes; static double version; public static int Offset; public static string HeaderText;
+        static string[] files; static string[] indexes; static double version; static int Offset; static string HeaderText;
         static Dictionary<string, double> RPA_MAGIC = new Dictionary<string, double>()
         {
             {"RPA-2.0", 2},{"RPA-3.0", 3},{"RPA-3.2", 3.2},{"RPA-4.0", 4}
-
         };
 
         //Получает версию RPA из файла
@@ -144,7 +143,7 @@ namespace Solicen.RenPy
             Console.WriteLine("New Offset : " + zOffset);
 
 
-            Console.WriteLine("Итогая строка:\n" + f1 + " " + zOffset);
+            Console.WriteLine("Итоговая строка:\n" + f1 + " " + zOffset);
             t = t.Replace(f2, zOffset);
             return t;
         }
@@ -161,12 +160,10 @@ namespace Solicen.RenPy
             Console.WriteLine("\nВсе процессы завершены!");
         }
 
-        public static string[] ListFromDirectory(string directory)
-        {
-            return Directory.GetFiles(directory, "*", SearchOption.AllDirectories)
-                .Select(x => x.Replace($"{directory}\\", "")).ToArray();
-        }
-
+        public static string[] ListFromDirectory(string directory) 
+            => Directory.GetFiles(directory, "*", SearchOption.AllDirectories)
+            .Select(x => x.Replace($"{directory}\\", "")).ToArray();
+        
         //Создает поток из строки
         public static Stream GenerateStreamFromString(string s)
         {
@@ -308,17 +305,9 @@ namespace Solicen.RenPy
         }
 
         //Получить RPA файлы в папке
-        static string[] RPAFilesInDirectory(string DirectoryPath)
-        {
-            var d = Directory.GetFiles(DirectoryPath);
-            List<string> directories = new List<string>();
-            foreach(var dir in d)
-            {
-                if (dir.EndsWith(".rpa")) directories.Add(dir);
-            }
-            return directories.ToArray();
-        }
-
+        static string[] RPAFilesInDirectory(string DirectoryPath) 
+            => Directory.GetFiles(DirectoryPath).Where(x => x.EndsWith(".rpa")).ToArray();
+        
         static void ExtractZlibHeader(string path)
         {
             var key = 0; version = 3; indexes = null;
@@ -385,14 +374,9 @@ namespace Solicen.RenPy
             }
         } 
 
-        static string ConvertToHex(string input)
-        {
-            var dataByte = Encoding.Default.GetBytes(input);
-            string HEX = BitConverter.ToString(dataByte);
-            HEX = HEX.Replace("-", "");
-            return HEX;
-        }
-
+        static string ConvertToHex(string input) 
+            => BitConverter.ToString(Encoding.Default.GetBytes(input)).Replace("-","");
+        
         static StringBuilder builder = new StringBuilder();
         static void CreateFilesLog()
         {
