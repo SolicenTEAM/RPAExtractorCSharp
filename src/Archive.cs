@@ -68,10 +68,7 @@ namespace Solicen.RenPy
 
             Console.WriteLine("Все файлы были успешно добавлены");
             File.WriteAllBytes(outputPath+".rpa", bytesFile);
-
-
         }
-
         
         // Осталось в коде, но является не рабочим и не используется.
         public static void AddFilesToRPA(string PATHtoFile, string InputDirectory)
@@ -142,7 +139,6 @@ namespace Solicen.RenPy
             Console.WriteLine("Old Offset : " + f2);
             Console.WriteLine("New Offset : " + zOffset);
 
-
             Console.WriteLine("Итоговая строка:\n" + f1 + " " + zOffset);
             t = t.Replace(f2, zOffset);
             return t;
@@ -156,7 +152,6 @@ namespace Solicen.RenPy
             {
                 ExtractArchive(rpa, output);
             }
-
             Console.WriteLine("\nВсе процессы завершены!");
         }
 
@@ -205,11 +200,6 @@ namespace Solicen.RenPy
                 //Если первая строка содержит RPA-X-X то пропустить данный 'файл'
                 if (f.StartsWith("RPA")) continue;
                 fileName = ""; 
-
-                //Следующие два метода проверяют есть ли в файле RPA осмысленный текст от файл RPY
-                //То есть запакован ли в RPA файл обычный RPY файл без обфускации
-                //RegexMatchesOfRPY(f);
-                //if (f.Contains(".rpy")) fileName = GetStringContainsOfRPY(RegexMatchesOfRPY(f));
 
                 if (indexes.Length != 0)
                 {
@@ -341,8 +331,7 @@ namespace Solicen.RenPy
 
                 Console.WriteLine("RPA Offset   : " + offset);
                 Console.WriteLine("RPA EndKey   : " + key);
-                Console.WriteLine("Длина потока : " + reader.BaseStream.Length);
-
+                Console.WriteLine("RPA Length   : " + reader.BaseStream.Length);
 
                 byte[] bytesOfFile = ReadAllBytesOfStream(br.BaseStream, offset, (int)br.BaseStream.Length);
 
@@ -361,8 +350,7 @@ namespace Solicen.RenPy
                         string s = r1.Replace(s1, "");
 
                         tempIndexes.Add(s); Console.WriteLine(s);
-                    }
-                    
+                    }               
                 }
 
                 Console.WriteLine("Количество совпадений : " + tempIndexes.Count);
@@ -376,13 +364,6 @@ namespace Solicen.RenPy
 
         static string ConvertToHex(string input) 
             => BitConverter.ToString(Encoding.Default.GetBytes(input)).Replace("-","");
-        
-        static StringBuilder builder = new StringBuilder();
-        static void CreateFilesLog()
-        {
-            File.WriteAllText(Environment.CurrentDirectory + "\\extractor.log", builder.ToString(), Encoding.GetEncoding(1252));
-            Environment.Exit(0);
-        }
     }
 }
 
