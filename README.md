@@ -38,7 +38,7 @@ The initial state of the code and the project involved adding files to `RPA` arc
 However, the original developers: [Denis Solicen](https://github.com/DenisSolicen) and [SAn4Es-TV](https://github.com/SAn4Es-TV) did not find a good solution to pack the archives back, since this would have required using parts of the Python code, which completely contradicts the original idea of the project.
 
 
-## All rights reserved by us for You
+## All rights reserved
 You can use this project/script anywhere you want with an indication of authorship ([Denis Solicen](https://github.com/DenisSolicen) & [SAn4Es-TV](https://github.com/SAn4Es-TV)) in accordance with the MIT license. You can also freely modify this project, create forks, and interact with the source code in any way to continue and improve the project after us.
 
 ---
