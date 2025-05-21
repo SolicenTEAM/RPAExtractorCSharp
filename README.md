@@ -38,13 +38,10 @@ The initial state of the code and the project involved adding files to `RPA` arc
 However, the original developers: [Denis Solicen](https://github.com/DenisSolicen) and [SAn4Es-TV](https://github.com/SAn4Es-TV) did not find a good solution to pack the archives back, since this would have required using parts of the Python code, which completely contradicts the original idea of the project.
 
 
-## All rights reserved
+## All rights reserved:
 You can use this project/script anywhere you want with an indication of authorship ([Denis Solicen](https://github.com/DenisSolicen) & [SAn4Es-TV](https://github.com/SAn4Es-TV)) in accordance with the MIT license. You can also freely modify this project, create forks, and interact with the source code in any way to continue and improve the project after us.
 
----
 We express our great gratitude to the author of `unRPA` for the open source code on the basis of which this project was created in the CSharp language.
-
----
 
 These wonderful people have made an invaluable contribution to the project:
 
