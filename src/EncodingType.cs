@@ -1,9 +1,8 @@
-﻿using System;using System.Collections.Generic;using System.IO;
-using System.Linq;using System.Text;using System.Threading.Tasks;
+﻿using System;using System.IO;using System.Text;
 
 class EncodingType
 {
-    public static System.Text.Encoding GetType(string FILE_NAME)
+    public static Encoding GetType(string FILE_NAME)
     {
         FileStream fs = new FileStream(FILE_NAME, FileMode.Open, FileAccess.Read);
         Encoding r = GetType(fs);
@@ -11,15 +10,11 @@ class EncodingType
         return r;
     }
 
-    public static System.Text.Encoding GetType(FileStream fs)
+    public static Encoding GetType(FileStream fs)
     {
-        byte[] Unicode = new byte[] { 0xFF, 0xFE, 0x41 };
-        byte[] UnicodeBIG = new byte[] { 0xFE, 0xFF, 0x00 };
-        byte[] UTF8 = new byte[] { 0xEF, 0xBB, 0xBF }; //with BOM
-        Encoding reVal = Encoding.Default;
+        Encoding reVal = Encoding.Default; int i;
+        BinaryReader r = new BinaryReader(fs, Encoding.Default);
 
-        BinaryReader r = new BinaryReader(fs, System.Text.Encoding.Default);
-        int i;
         int.TryParse(fs.Length.ToString(), out i);
         byte[] ss = r.ReadBytes(i);
         if (IsUTF8Bytes(ss) || (ss[0] == 0xEF && ss[1] == 0xBB && ss[2] == 0xBF))

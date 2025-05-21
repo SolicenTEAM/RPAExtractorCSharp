@@ -1,6 +1,10 @@
-﻿using System;using System.Collections.Generic;using System.IO;using System.IO.Compression;
-using System.Linq;
-using System.Text;using System.Text.RegularExpressions;using System.Threading.Tasks;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq; 
+using System.Text;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using zlib; // zlib.net 
 
 //REN'PY RPA Extractor by Denis Solicen & SAn4Es_TV
@@ -16,16 +20,15 @@ namespace Solicen.RenPy
         };
 
         //Получает версию RPA из файла
+        //Необходим Double а не INT32, так есть промежуточные версии RPA
         public static double GetVersion(string path)
         {
-            string s = File.ReadAllLines(path)[0];
-            string magic = s;
-
-            Console.WriteLine("magic: " + s);
-            var _magic = RPA_MAGIC.FirstOrDefault(x => magic.StartsWith(x.Key)).Value;
-
             if (path.EndsWith(".rpi")) return 1;
-            else return _magic;
+            string magic = File.ReadLines(path).First();
+            var result = RPA_MAGIC.FirstOrDefault(x => magic.StartsWith(x.Key)).Value;
+            Console.WriteLine("[MAGIC]: " + magic);
+
+            return result;
         }
 
         public static void CreateRPA(string outputPath, string InputDirectory)
@@ -50,7 +53,7 @@ namespace Solicen.RenPy
                 var renpySplitter = "\n" + "Made with Ren'Py.";
                 var f1 = File.ReadAllText(file, Encoding.GetEncoding(1251));
                 newFile += renpySplitter + f1;
-                Console.WriteLine(" в архив : " + fileName + " : добавлен файл : " + l[index]);
+                Console.WriteLine(" To archive : " + fileName + " : added file : " + l[index]);
                 index++;
                 lenghtFile += f1.Length + renpySplitter.Length;
             }
@@ -147,12 +150,12 @@ namespace Solicen.RenPy
         //Извлекает все RPA файлы
         public static void ExtractAllRPA(string directory, string output)
         {     
-            var RPAFiles = RPAFilesInDirectory(directory);
-            foreach (var rpa in RPAFiles)
+            foreach (var rpa in RPAFilesInDirectory(directory))
             {
                 ExtractArchive(rpa, output);
+                GC.Collect();
             }
-            Console.WriteLine("\nВсе процессы завершены!");
+            Console.WriteLine("[INF] All process is finished!");
         }
 
         public static string[] ListFromDirectory(string directory) 
@@ -180,13 +183,28 @@ namespace Solicen.RenPy
             return files.Select(x => x.Split('/')[x.Split('/').Length - 1]).ToArray();
         }
 
+        private static string ParseFormat(string line)
+        {
+            if (line.StartsWith("RENPY RPC2")) return ".rpyс"; // Заголовок RPYC файла
+            if (line.StartsWith("‰PNG")) return ".png";        // Заголовок RNG файла
+            if (line.StartsWith("Ogg")) return ".ogg";         // Заголовок OGG файла
+            if (line.StartsWith("ID3")) return ".mp3";         // Заголовок MP3 файла
+            if (line.Contains("#File ")) return ".txt";        // Заголовок TXT файла
+
+            //Иначе считаем файлом PRY
+            return ".rpy";
+        }
+
         static int index = 0;
         public static void ExtractArchive(string path, string output)
         {
+            Console.WriteLine($"[Parse process]");
+
             //Стандартная кодировка Windows 1251
             Encoding enCode = Encoding.GetEncoding(1252);
             string[] files = Regex.Split(File.ReadAllText(path, enCode), "Made with Ren'Py.", RegexOptions.Multiline);
-            Console.WriteLine("Найдено файлов : " + (files.Length - 1));
+            Console.WriteLine($"[INF] Parse file : {path}");
+            Console.WriteLine($"[INF] Files found: {files.Length - 1}");
         
             ExtractZlibHeader(path); //Получаем индексы и заголовок файла
 
@@ -194,12 +212,15 @@ namespace Solicen.RenPy
             var directoryName = directory.Split('/')[directory.Split('/').Length - 1];
             var filePath = "\\m\\";
 
-            Console.WriteLine(directoryName);
+            //Console.WriteLine(directoryName);
+            Console.WriteLine($"[Extraction process]");
+            Directory.CreateDirectory(directory);
+
             foreach (var f in files)
             {
                 //Если первая строка содержит RPA-X-X то пропустить данный 'файл'
                 if (f.StartsWith("RPA")) continue;
-                fileName = ""; 
+                fileName = "";
 
                 if (indexes.Length != 0)
                 {
@@ -212,73 +233,27 @@ namespace Solicen.RenPy
                 //Если имя файла не найдено.
                 if (fileName == "")
                 {
-                    //Заголовок RPYC файла
-                    if (f.StartsWith("RENPY RPC2"))
-                    {          
-                        if (File.Exists(directory + index + ".rpyс")) continue;
-                        Console.WriteLine("Извлечен файл : " + index + ".rpyс" + " : ");
-                        Directory.CreateDirectory(directory);
-                        File.WriteAllText(directory + index + ".rpyс", f);
-                        
-                    }
-                    //Заголовок RNG файла
-                    else if (f.StartsWith("‰PNG"))
-                    {
-                        if (File.Exists(directory + index + ".png")) continue;
-                        Console.WriteLine("Извлечен файл : " + index + ".png" + " : ");
-                        Directory.CreateDirectory(directory);
-                        File.WriteAllText(directory + index + ".png", f, enCode);
-                    }
-                    //Заголовок OGG файла
-                    else if (f.StartsWith("Ogg"))
-                    {
-                        if (File.Exists(directory + index + ".ogg")) continue;
-                        Console.WriteLine("Извлечен файл : " + index + ".ogg" + " : ");
-                        Directory.CreateDirectory(directory);
-                        File.WriteAllText(directory + index + ".ogg", f, enCode);
-                    }
-                    //Заголовок MP3 файла
-                    else if (f.StartsWith("ID3"))
-                    {
-                        if (File.Exists(directory + index + ".mp3")) continue;
-                        Console.WriteLine("Извлечен файл : " + index + ".mp3" + " : ");
-                        Directory.CreateDirectory(directory);
-                        File.WriteAllText(directory + index + ".mp3", f, enCode);
-                    }
-                    //Заголовок RPY или TXT файла
-                    else if (f.Contains("#File ") || f.Contains("  "))
-                    {
-                        if (File.Exists(directory + index + ".txt")) continue;
-                        Console.WriteLine("Извлечен файл : " + index + ".txt" + " : ");
-                        Directory.CreateDirectory(directory);
-                        File.WriteAllText(directory + index + ".txt", f);
-                    }
-                    //Если ни одного заголовка не найдено считаем файлом PRY
-                    else
-                    {
-                        if (File.Exists(directory + index + ".rpy")) continue;
-                        Console.WriteLine("Извлечен файл : " + index + ".rpy" + " : ");
-                        Directory.CreateDirectory(directory);
-                        File.WriteAllText(directory + index + ".rpy", f);
-                    }
+                    var fName = $"{index}{ParseFormat(f)}";
+                    if (File.Exists(directory + fName)) continue;
+                    Console.WriteLine($"[INF] Successfully extracted file: {fName}");
+                    File.WriteAllText(directory + fName, f, enCode);                
                     index++;
-                    
+
                 }
-                //Если имя файла найденно
+                //Если имя файла найдено
                 else
                 {
                     try
                     {
-                        Console.WriteLine("Извлечен файл : " + fileName + " : ");
+                        Console.WriteLine($"[INF] Successfully extracted ({Path.GetExtension(fileName)}): " + fileName);
                         Directory.CreateDirectory(directory + "\\" + filePath);
                         File.WriteAllText(directory + "\\" + filePath + "\\" + fileName, f, enCode);
                         indexFile++;
                     }
                     catch { }
-                }            
+                }
             }
-
-            Console.WriteLine("\nПроцесс завершен!");
+            Console.WriteLine($"\n[INF] Extraction ({Path.GetFileName(path)}) is finished!\n");
         }
 
         //Прочитывает все необходимые байты из потока
@@ -300,11 +275,11 @@ namespace Solicen.RenPy
         
         static void ExtractZlibHeader(string path)
         {
-            var key = 0; version = 3; indexes = null;
-
+            var key = 0; version = GetVersion(path); indexes = null;
             var code = EncodingType.GetType(path);
-            Console.WriteLine("\nФайл         : " + Path.GetFileName(path));
-            Console.WriteLine("Кодировка    : " + code.HeaderName);
+
+            Console.WriteLine("\nFile         : " + Path.GetFileName(path));
+            Console.WriteLine("Encoding     : " + code.HeaderName);
 
             FileStream fileStream = new FileStream(path, FileMode.Open);
             BinaryReader br = new BinaryReader(fileStream);
@@ -320,40 +295,41 @@ namespace Solicen.RenPy
 
                 if (version == 3)
                 {
-                    key = 0;
                     key = Convert.ToInt32(vals[2], 16);
                 }
                 else if (version == 3.2) 
                 {
-                    key = 0;
                     key ^= Convert.ToInt32(vals[3], 16);
                 }
 
                 Console.WriteLine("RPA Offset   : " + offset);
                 Console.WriteLine("RPA EndKey   : " + key);
                 Console.WriteLine("RPA Length   : " + reader.BaseStream.Length);
+                Console.WriteLine();
 
                 byte[] bytesOfFile = ReadAllBytesOfStream(br.BaseStream, offset, (int)br.BaseStream.Length);
 
                 List<string> tempIndexes = new List<string>();
                 string final = Solicen.Compress.DeDecompressToString(bytesOfFile);
-                Console.WriteLine("Финал : " + final + "\n");
+                // Console.WriteLine("Final : " + final + "\n");
                 Regex regex = new Regex(@"(?<=\x00\x00\x00).*?(?=\])", RegexOptions.IgnoreCase);
                 MatchCollection matches = regex.Matches(final);
 
                 if (matches.Count > 0)
                 {
+                    Console.WriteLine($"[INF] Files in archive:");
                     foreach (Match match in matches)
                     { 
                         string s1 = match.ToString(); 
                         Regex r1 = new Regex(@"q$|q.$");
                         string s = r1.Replace(s1, "");
 
-                        tempIndexes.Add(s); Console.WriteLine(s);
+                        tempIndexes.Add(s);
+ 
+                        Console.WriteLine($"- {s}");
                     }               
                 }
-
-                Console.WriteLine("Количество совпадений : " + tempIndexes.Count);
+                Console.WriteLine();
                 tempIndexes.Sort(StringComparer.OrdinalIgnoreCase);
                 indexes = tempIndexes.ToArray();
                 fs.Close(); br.Close(); fileStream.Close();
@@ -417,7 +393,7 @@ namespace Solicen.EX
             var t = zlibHeader;
             foreach (var file in newFilesPATH)
             {
-                Console.WriteLine("Добавляю файл :" + file + " в заголовок");
+                Console.WriteLine("Add file :" + file + " to a header");
                 t += "\x00\x00\x00" + file + "]";
             }
             return t;
@@ -446,4 +422,5 @@ namespace Solicen.EX
         }
     }
 }
+
 
