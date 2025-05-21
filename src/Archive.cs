@@ -26,7 +26,7 @@ namespace Solicen.RenPy
             if (path.EndsWith(".rpi")) return 1;
             string magic = File.ReadLines(path).First();
             var result = RPA_MAGIC.FirstOrDefault(x => magic.StartsWith(x.Key)).Value;
-            Console.WriteLine("[MAGIC]: " + magic);
+            Console.WriteLine("[INF] MAGIC: " + magic);
 
             return result;
         }
@@ -234,7 +234,11 @@ namespace Solicen.RenPy
                 if (fileName == "")
                 {
                     var fName = $"{index}{ParseFormat(f)}";
-                    if (File.Exists(directory + fName)) continue;
+                    if (File.Exists(directory + fName)) 
+                    {
+                        Console.WriteLine($"[INF] File already extracted: {fName}");
+                        continue;
+                    } 
                     Console.WriteLine($"[INF] Successfully extracted file: {fName}");
                     File.WriteAllText(directory + fName, f, enCode);                
                     index++;
